@@ -5,6 +5,10 @@
 
 Например, кроме, DTO в виде stdClass поддерживаются SpatieDTO. Кое-что выпилено за ненадобностью (куки, заголовки и тому подобное).
 
+### Установка
+
+`composer require proklung/annotatedparamresolverbundle`
+
 ### Аннотации:
 
 * **RequestBody** - Преобразует request body в аргумент контроллера (DTO).
