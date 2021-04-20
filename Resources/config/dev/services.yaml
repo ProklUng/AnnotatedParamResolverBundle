@@ -1,0 +1,17 @@
+services:
+  # конфигурация по умолчанию в *этом* файле
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  # Класс для временного (тестового) контейнера.
+  annotated_bundle_resolvers.double.service.container:
+    class: Symfony\Component\DependencyInjection\ContainerBuilder
+
+  # Тестовый контейнер.
+  annotated_bundle_resolvers.test.service_container:
+    class: Prokl\AnnotatedParamResolverBundle\Tests\Tools\CustomTestContainer
+    arguments: ['@kernel', 'annotated_bundle_resolvers.double.service.container']
+    calls:
+      - setTestContainer: ['@annotated_bundle_resolvers.double.service.container']

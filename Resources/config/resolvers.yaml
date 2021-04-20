@@ -1,0 +1,61 @@
+services:
+  # конфигурация по умолчанию в *этом* файле
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  # Валидатор Symfony
+  annotated_bundle_resolvers.validator:
+    public: false
+    class: Symfony\Component\Validator\Validator\ValidatorInterface
+    factory: ['Symfony\Component\Validator\Validation', 'createValidator']
+
+  # Валидатор запроса.
+  annotated_bundle_resolvers.validator_request:
+    public: false
+    class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidator
+    arguments:
+      - '@annotations.cached_reader'
+      - '@annotated_bundle_resolvers.validator'
+      - '@serializer'
+
+  Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidatorInterface: '@annotated_bundle_resolvers.validator_request'
+
+  # Request в DTO.
+  # Важно: priority должно быть установлено как можно больше,
+  # иначе все зашибает симфонический ServiceValueResolver и до этого ресолвера
+  # дело не доходит.
+  annotated_bundle_resolvers.unserialize_request:
+    class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestBodyArgumentResolver
+    arguments:
+      - '@annotations.cached_reader'
+      - '@Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver'
+      - '@serializer'
+      - '@annotated_bundle_resolvers.validator_request'
+    tags:
+      - { name: controller.argument_value_resolver, priority: 1500 }
+
+  # $_GET параметры в DTO.
+  annotated_bundle_resolvers.query_params:
+    class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\QueryParamsArgumentResolver
+    arguments:
+      - '@annotations.cached_reader'
+      - '@Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver'
+      - '@serializer'
+      - '@annotated_bundle_resolvers.validator_request'
+      - '@property_info'
+    tags:
+      - { name: controller.argument_value_resolver, priority: 1500 }
+
+  # $_POST параметры в DTO.
+  annotated_bundle_resolvers.post_params:
+    class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestParamArgumentResolver
+    arguments:
+      - '@annotations.cached_reader'
+      - '@Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver'
+      - '@serializer'
+      - '@annotated_bundle_resolvers.validator_request'
+      - '@property_info'
+    tags:
+      - { name: controller.argument_value_resolver, priority: 1500 }
