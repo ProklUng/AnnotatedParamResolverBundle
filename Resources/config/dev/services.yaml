@@ -11,7 +11,7 @@ services:
 
   # Тестовый контейнер.
   annotated_bundle_resolvers.test.service_container:
-    class: Prokl\AnnotatedParamResolverBundle\Tests\Tools\CustomTestContainer
+    class: Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\CustomTestContainer
     arguments: ['@kernel', 'annotated_bundle_resolvers.double.service.container']
     calls:
       - setTestContainer: ['@annotated_bundle_resolvers.double.service.container']
