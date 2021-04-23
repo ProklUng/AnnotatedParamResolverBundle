@@ -7,11 +7,11 @@ use InvalidArgumentException;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateErrorException;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestBodyArgumentResolver;
 use Prokl\AnnotatedParamResolverBundle\Examples\RequestBodyConverted;
+use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ContainerAwareBaseTestCase;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerBody;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerMismatched;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
-use Prokl\TestingTools\Base\BaseTestCase;
 use ReflectionException;
 
 /**
@@ -21,7 +21,7 @@ use ReflectionException;
  *
  * @since 03.04.2021
  */
-class RequestBodyArgumentResolverTest extends BaseTestCase
+class RequestBodyArgumentResolverTest extends ContainerAwareBaseTestCase
 {
     use ArgumentResolverTrait;
 
@@ -200,7 +200,7 @@ class RequestBodyArgumentResolverTest extends BaseTestCase
     public function testResolveCallValidation(): void
     {
         $this->obTestObject = new RequestBodyArgumentResolver(
-            static::$testContainer->get('annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
             static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(true)
@@ -232,7 +232,7 @@ class RequestBodyArgumentResolverTest extends BaseTestCase
     public function testResolveValidationOption(): void
     {
         $this->obTestObject = new RequestBodyArgumentResolver(
-            static::$testContainer->get('annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
             static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(false)

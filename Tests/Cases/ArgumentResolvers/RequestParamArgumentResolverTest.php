@@ -7,11 +7,11 @@ use InvalidArgumentException;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateErrorException;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestParamArgumentResolver;
 use Prokl\AnnotatedParamResolverBundle\Examples\RequestBodyConverted;
+use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ContainerAwareBaseTestCase;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerMismatched;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerPost;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
-use Prokl\TestingTools\Base\BaseTestCase;
 use ReflectionException;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Controller\ControllerResolver;
  *
  * @since 03.04.2021
  */
-class RequestParamArgumentResolverTest extends BaseTestCase
+class RequestParamArgumentResolverTest extends ContainerAwareBaseTestCase
 {
     use ArgumentResolverTrait;
 
@@ -200,7 +200,7 @@ class RequestParamArgumentResolverTest extends BaseTestCase
     public function testResolveCallValidation(): void
     {
         $this->obTestObject = new RequestParamArgumentResolver(
-            static::$testContainer->get('annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
             static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(true),
@@ -233,7 +233,7 @@ class RequestParamArgumentResolverTest extends BaseTestCase
     public function testResolveValidationOption(): void
     {
         $this->obTestObject = new RequestParamArgumentResolver(
-            static::$testContainer->get('annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
             static::$testContainer->get(ControllerResolver::class),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(false),

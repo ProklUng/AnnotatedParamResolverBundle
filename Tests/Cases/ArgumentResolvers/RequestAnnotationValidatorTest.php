@@ -5,8 +5,8 @@ namespace Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers;
 use Exception;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateErrorException;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidator;
+use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ContainerAwareBaseTestCase;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ExampleRequestClass;
-use Prokl\TestingTools\Base\BaseTestCase;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Validation;
  *
  * @since 03.04.2021
  */
-class RequestAnnotationValidatorTest extends BaseTestCase
+class RequestAnnotationValidatorTest extends ContainerAwareBaseTestCase
 {
     /**
      * @var RequestAnnotationValidator $obTestObject Тестируемый объект.
@@ -30,7 +30,7 @@ class RequestAnnotationValidatorTest extends BaseTestCase
     {
         parent::setUp();
         $this->obTestObject = new RequestAnnotationValidator(
-            static::$testContainer->get('annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
             Validation::createValidator(),
             static::$testContainer->get('serializer'),
         );

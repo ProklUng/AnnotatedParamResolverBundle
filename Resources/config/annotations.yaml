@@ -6,7 +6,7 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    public: false
+    public: true
 
   annotated_bundle_resolvers.annotations.dummy_registry:
     class: Doctrine\Common\Annotations\AnnotationRegistry

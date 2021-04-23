@@ -8,13 +8,14 @@ use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateError
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\QueryParamsArgumentResolver;
 use Prokl\AnnotatedParamResolverBundle\Examples\RequestBodyConverted;
 use Prokl\AnnotatedParamResolverBundle\Examples\RequestBodyConvertedSpatie;
+use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ContainerAwareBaseTestCase;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleController;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerMismatched;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
-use Prokl\TestingTools\Base\BaseTestCase;
 use ReflectionException;
 use Spatie\DataTransferObject\DataTransferObject;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 /**
  * Class QueryParamsArgumentResolverTest
@@ -23,7 +24,7 @@ use Spatie\DataTransferObject\DataTransferObject;
  *
  * @since 03.04.2021
  */
-class QueryParamsArgumentResolverTest extends BaseTestCase
+class QueryParamsArgumentResolverTest extends ContainerAwareBaseTestCase
 {
     use ArgumentResolverTrait;
 
@@ -43,7 +44,8 @@ class QueryParamsArgumentResolverTest extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->obTestObject = static::$testContainer->get('annotated_bundle_resolvers.query_params');
+
+        $this->obTestObject = $this->container->get('annotated_bundle_resolvers.query_params');
     }
 
     /**
@@ -313,8 +315,8 @@ class QueryParamsArgumentResolverTest extends BaseTestCase
     public function testResolveCallValidation(): void
     {
         $this->obTestObject = new QueryParamsArgumentResolver(
-            static::$testContainer->get('annotations.reader'),
-            static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
+            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
+            static::$testContainer->get(ControllerResolver::class),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(true),
             static::$testContainer->get('property_info'),
@@ -346,8 +348,8 @@ class QueryParamsArgumentResolverTest extends BaseTestCase
     public function testResolveValidationOption(): void
     {
         $this->obTestObject = new QueryParamsArgumentResolver(
-            static::$testContainer->get('annotations.reader'),
-            static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
+            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
+            static::$testContainer->get(ControllerResolver::class),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(false),
             static::$testContainer->get('property_info'),

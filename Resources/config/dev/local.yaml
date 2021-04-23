@@ -1,0 +1,16 @@
+##############
+# Сериалайзер
+##############
+
+services:
+  # конфигурация по умолчанию в *этом* файле
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleController: ~
+  Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments: ~
+  Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerMismatched: ~
+  Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerBody: ~
+  Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerPost: ~
