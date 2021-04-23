@@ -76,6 +76,11 @@ class RequestAnnotationValidator implements RequestAnnotationValidatorInterface
         $result = [];
 
         foreach ($validationConstraints as $property => $constraints) {
+            if (!property_exists($object, $property)) {
+                $result[$property][] = 'Property ' . $property . ' not exists.';
+                continue;
+            }
+
             $violations = $this->validator->validate($object->{$property}, $constraints);
             if (count($violations) > 0) {
                 foreach ($violations as $violation) {

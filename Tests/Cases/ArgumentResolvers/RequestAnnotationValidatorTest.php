@@ -87,11 +87,12 @@ class RequestAnnotationValidatorTest extends ContainerAwareBaseTestCase
             public $dummy;
         };
 
+        $this->expectException(ValidateErrorException::class);
+        $this->expectExceptionMessage('{"email":["Property email not exists."]}');
+
         $this->obTestObject->validate(
             $object,
             ExampleRequestClass::class
         );
-
-        $this->assertTrue(true);
     }
 }
