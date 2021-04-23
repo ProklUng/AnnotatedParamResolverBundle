@@ -33,6 +33,7 @@ class AnnotatedParamResolverExtension extends Extension
             $loader->load('dev/services.yaml');
         }
 
+        $loader->load('annotations.yaml');
         $loader->load('resolvers.yaml');
     }
 
