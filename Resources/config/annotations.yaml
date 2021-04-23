@@ -23,7 +23,7 @@ services:
     arguments:
       - 'annotations'
       - '%annotations.cache_ttl_default%'
-      - '%annotated_bundle_resolvers.cache_path'
+      - '%annotated_bundle_resolvers.cache_path%'
 
   annotated_bundle_resolvers.annotations.filesystem_cache:
     class: Symfony\Component\Cache\DoctrineProvider
