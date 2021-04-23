@@ -12,7 +12,7 @@ use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\Sampl
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerMismatched;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
-use Prokl\AnnotatedParamResolverBundle\Tests\Tools\BaseTestCase;
+use Prokl\TestingTools\Base\BaseTestCase;
 use ReflectionException;
 use Spatie\DataTransferObject\DataTransferObject;
 

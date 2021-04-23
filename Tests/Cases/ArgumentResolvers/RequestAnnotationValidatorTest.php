@@ -6,7 +6,7 @@ use Exception;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateErrorException;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidator;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ExampleRequestClass;
-use Prokl\AnnotatedParamResolverBundle\Tests\Tools\BaseTestCase;
+use Prokl\TestingTools\Base\BaseTestCase;
 use Symfony\Component\Validator\Validation;
 
 /**
