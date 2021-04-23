@@ -11,12 +11,16 @@ services:
     class: Symfony\Component\Validator\Validator\ValidatorInterface
     factory: ['Symfony\Component\Validator\Validation', 'createValidator']
 
+  annotated_bundle_resolvers.controller_resolver:
+    public: false
+    class: Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver
+
   # Валидатор запроса.
   annotated_bundle_resolvers.validator_request:
     public: false
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidator
     arguments:
-      - '@annotations.cached_reader'
+      - '@annotated_bundle_resolvers.annotations.cached_reader'
       - '@annotated_bundle_resolvers.validator'
       - '@serializer'
 
@@ -29,8 +33,8 @@ services:
   annotated_bundle_resolvers.unserialize_request:
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestBodyArgumentResolver
     arguments:
-      - '@annotations.cached_reader'
-      - '@Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver'
+      - '@annotated_bundle_resolvers.annotations.cached_reader'
+      - '@annotated_bundle_resolvers.controller_resolver'
       - '@serializer'
       - '@annotated_bundle_resolvers.validator_request'
     tags:
@@ -41,7 +45,7 @@ services:
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\QueryParamsArgumentResolver
     arguments:
       - '@annotations.cached_reader'
-      - '@Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver'
+      - '@annotated_bundle_resolvers.controller_resolver'
       - '@serializer'
       - '@annotated_bundle_resolvers.validator_request'
       - '@property_info'
@@ -53,7 +57,7 @@ services:
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestParamArgumentResolver
     arguments:
       - '@annotations.cached_reader'
-      - '@Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver'
+      - '@annotated_bundle_resolvers.controller_resolver'
       - '@serializer'
       - '@annotated_bundle_resolvers.validator_request'
       - '@property_info'
