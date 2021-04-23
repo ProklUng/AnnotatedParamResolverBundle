@@ -44,7 +44,7 @@ services:
   annotated_bundle_resolvers.query_params:
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\QueryParamsArgumentResolver
     arguments:
-      - '@annotations.cached_reader'
+      - '@annotated_bundle_resolvers.annotations.cached_reader'
       - '@annotated_bundle_resolvers.controller_resolver'
       - '@serializer'
       - '@annotated_bundle_resolvers.validator_request'
@@ -56,7 +56,7 @@ services:
   annotated_bundle_resolvers.post_params:
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestParamArgumentResolver
     arguments:
-      - '@annotations.cached_reader'
+      - '@annotated_bundle_resolvers.annotations.cached_reader'
       - '@annotated_bundle_resolvers.controller_resolver'
       - '@serializer'
       - '@annotated_bundle_resolvers.validator_request'
