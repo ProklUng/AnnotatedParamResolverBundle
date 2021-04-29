@@ -2,8 +2,8 @@
 
 namespace Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions;
 
-use Prokl\AnnotatedParamResolverBundle\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface;
+use Prokl\BaseException\BaseException;
 
 /**
  * Class ValidateErrorException
