@@ -9,10 +9,12 @@ use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestBodyArgumentResol
 use Prokl\AnnotatedParamResolverBundle\Examples\RequestBodyConverted;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ContainerAwareBaseTestCase;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerBody;
+use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerBodyAnno;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerMismatched;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
 use ReflectionException;
+use Spiral\Attributes\AttributeReader;
 
 /**
  * Class RequestBodyArgumentResolverTest
@@ -54,6 +56,30 @@ class RequestBodyArgumentResolverTest extends ContainerAwareBaseTestCase
     {
         $request = $this->createRequestJson(
             $this->controllerClass,
+            [
+                'email' => $this->faker->email,
+                'numeric' => $this->faker->numberBetween(1, 100),
+            ],
+        );
+
+        $result = $this->obTestObject->supports(
+            $request,
+            $this->getMetaArgument('unserialized', RequestBodyConverted::class)
+        );
+
+        $this->assertTrue($result, 'Неправильно определился годный к обработке контроллер');
+    }
+
+    /**
+     * supports(). Нормальный запрос.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testSupportsAnno(): void
+    {
+        $request = $this->createRequestJson(
+            SampleControllerBodyAnno::class,
             [
                 'email' => $this->faker->email,
                 'numeric' => $this->faker->numberBetween(1, 100),
@@ -203,7 +229,8 @@ class RequestBodyArgumentResolverTest extends ContainerAwareBaseTestCase
             static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
             static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
             static::$testContainer->get('serializer'),
-            $this->getMockValidator(true)
+            $this->getMockValidator(true),
+            new AttributeReader()
         );
 
         $request = $this->createRequestJson(
@@ -235,7 +262,8 @@ class RequestBodyArgumentResolverTest extends ContainerAwareBaseTestCase
             static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
             static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
             static::$testContainer->get('serializer'),
-            $this->getMockValidator(false)
+            $this->getMockValidator(false),
+            new AttributeReader()
         );
 
         $request = $this->createRequestJson(

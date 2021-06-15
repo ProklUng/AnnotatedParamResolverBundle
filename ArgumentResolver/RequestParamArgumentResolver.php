@@ -9,6 +9,7 @@ use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateError
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidatorInterface;
 use ReflectionException;
+use Spiral\Attributes\AttributeReader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
@@ -64,6 +65,11 @@ final class RequestParamArgumentResolver implements ArgumentValueResolverInterfa
     private $extractor;
 
     /**
+     * @var AttributeReader $modernReader Читатель аннотаций PHP 8.
+     */
+    private $modernReader;
+
+    /**
      * RequestBodyArgumentResolver constructor.
      *
      * @param Reader                              $reader             Читатель аннотаций.
@@ -71,19 +77,22 @@ final class RequestParamArgumentResolver implements ArgumentValueResolverInterfa
      * @param SerializerInterface                 $serializer         Сериалайзер.
      * @param RequestAnnotationValidatorInterface $validator          Валидатор.
      * @param PropertyInfoExtractor               $extractor          Property extractor.
+     * @param AttributeReader                     $modernReader       Читатель аннотаций PHP 8.
      */
     public function __construct(
         Reader $reader,
         ControllerResolver $controllerResolver,
         SerializerInterface $serializer,
         RequestAnnotationValidatorInterface $validator,
-        PropertyInfoExtractor $extractor
+        PropertyInfoExtractor $extractor,
+        AttributeReader $modernReader
     ) {
         $this->reader = $reader;
         $this->controllerResolver = $controllerResolver;
         $this->serializer = $serializer;
         $this->validator = $validator;
         $this->extractor = $extractor;
+        $this->modernReader = $modernReader;
     }
 
     /**

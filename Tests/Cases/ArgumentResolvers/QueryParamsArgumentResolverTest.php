@@ -15,6 +15,7 @@ use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\Argu
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
 use ReflectionException;
 use Spatie\DataTransferObject\DataTransferObject;
+use Spiral\Attributes\AttributeReader;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 /**
@@ -320,6 +321,7 @@ class QueryParamsArgumentResolverTest extends ContainerAwareBaseTestCase
             static::$testContainer->get('serializer'),
             $this->getMockValidator(true),
             static::$testContainer->get('property_info'),
+            new AttributeReader()
         );
 
         $request = $this->createRequest(
@@ -353,6 +355,7 @@ class QueryParamsArgumentResolverTest extends ContainerAwareBaseTestCase
             static::$testContainer->get('serializer'),
             $this->getMockValidator(false),
             static::$testContainer->get('property_info'),
+            new AttributeReader()
         );
 
         $request = $this->createRequest(

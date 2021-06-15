@@ -13,6 +13,7 @@ use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\Sampl
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
 use ReflectionException;
+use Spiral\Attributes\AttributeReader;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 /**
@@ -205,6 +206,7 @@ class RequestParamArgumentResolverTest extends ContainerAwareBaseTestCase
             static::$testContainer->get('serializer'),
             $this->getMockValidator(true),
             static::$testContainer->get('property_info'),
+            new AttributeReader()
         );
 
         $request = $this->createRequestPost(
@@ -238,6 +240,7 @@ class RequestParamArgumentResolverTest extends ContainerAwareBaseTestCase
             static::$testContainer->get('serializer'),
             $this->getMockValidator(false),
             static::$testContainer->get('property_info'),
+            new AttributeReader()
         );
 
         $request = $this->createRequestPost(

@@ -8,6 +8,7 @@ use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
 use Spatie\DataTransferObject\DataTransferObject;
+use Spiral\Attributes\AnnotationReader;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
  * @package Prokl\AnnotatedParamResolverBundle\ArgumentsResolver\Traits
  *
  * @since 02.04.2021
+ *
+ * @property AnnotationReader $modernReader
  */
 trait ArgumentResolverTrait
 {
@@ -33,6 +36,13 @@ trait ArgumentResolverTrait
         }
 
         $method = new ReflectionMethod($controller[0], $controller[1]);
+
+        // PHP 8 аннотации
+        $modernAnnotation = $this->modernReader->getFunctionMetadata($method, $class);
+        $arModernAnnotations = iterator_to_array($modernAnnotation);
+        if (count($arModernAnnotations) > 0) {
+            return current($arModernAnnotations);
+        }
 
         return $this->reader->getMethodAnnotation($method, $class);
     }

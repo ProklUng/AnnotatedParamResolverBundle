@@ -7,6 +7,8 @@ use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateError
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidator;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ContainerAwareBaseTestCase;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ExampleRequestClass;
+use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ExampleRequestClassAnno;
+use Spiral\Attributes\AttributeReader;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -33,6 +35,7 @@ class RequestAnnotationValidatorTest extends ContainerAwareBaseTestCase
             static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
             Validation::createValidator(),
             static::$testContainer->get('serializer'),
+            new AttributeReader()
         );
     }
 
@@ -72,6 +75,25 @@ class RequestAnnotationValidatorTest extends ContainerAwareBaseTestCase
         $this->obTestObject->validate(
             $object,
             ExampleRequestClass::class
+        );
+    }
+
+    /**
+     * validate(). Невалидный параметр. Аннотация PHP 8.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testValidateInvalidValueAnno() : void
+    {
+        $object = new class {
+            public $email = 'x';
+        };
+
+        $this->expectException(ValidateErrorException::class);
+        $this->obTestObject->validate(
+            $object,
+            ExampleRequestClassAnno::class
         );
     }
 

@@ -9,6 +9,7 @@ use Doctrine\Common\Annotations\Annotation;
  *
  * @since 02.04.2021
  */
+#[\Attribute]
 class RequestParams extends Annotation
 {
     /** @var string Класс, в экземпляр которого будет проведена десериализация Request. */

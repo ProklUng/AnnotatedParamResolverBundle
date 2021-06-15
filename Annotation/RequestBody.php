@@ -9,6 +9,7 @@ use Doctrine\Common\Annotations\Annotation;
  *
  * @since 01.04.2021
  */
+#[\Attribute]
 class RequestBody extends Annotation
 {
     /** @var string Класс, в экземпляр которого будет проведена десериализация Request. */
