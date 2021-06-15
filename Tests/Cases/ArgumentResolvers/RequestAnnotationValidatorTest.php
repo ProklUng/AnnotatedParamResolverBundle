@@ -8,7 +8,6 @@ use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotat
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ContainerAwareBaseTestCase;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ExampleRequestClass;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\ExampleRequestClassAnno;
-use Spiral\Attributes\AttributeReader;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -32,10 +31,9 @@ class RequestAnnotationValidatorTest extends ContainerAwareBaseTestCase
     {
         parent::setUp();
         $this->obTestObject = new RequestAnnotationValidator(
-            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.annotations_selective_reader'),
             Validation::createValidator(),
             static::$testContainer->get('serializer'),
-            new AttributeReader()
         );
     }
 

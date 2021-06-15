@@ -3,14 +3,12 @@
 namespace Prokl\AnnotatedParamResolverBundle\ArgumentResolver;
 
 use ReflectionException;
-use Doctrine\Common\Annotations\Reader;
 use Prokl\AnnotatedParamResolverBundle\Annotation\RequestBody;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Contracts\UnserializableRequestInterface;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateErrorException;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidatorInterface;
-use Spiral\Attributes\AnnotationReader;
-use Spiral\Attributes\AttributeReader;
+use Spiral\Attributes\ReaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
@@ -23,7 +21,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  *
  * @description
  *
- * Аннотация метода контроллера - @RequestBody. Параметры (не обязательные)
+ * Аннотация метода контроллера - @RequestBody. Или PHP 8 атрибут RequestBody.
+ * Параметры (не обязательные):
  * var - название переменной в action контроллера,
  * class - класс переменной в action контроллера.
  * Если не указано ни того, ни другого, то ресолвер проверяет - не реализует ли класс
@@ -40,7 +39,7 @@ final class RequestBodyArgumentResolver implements ArgumentValueResolverInterfac
     private const DEFAULT_ANNOTATION = RequestBody::class;
 
     /**
-     * @var Reader $reader Читатель аннотаций.
+     * @var ReaderInterface $reader Читатель аннотаций.
      */
     private $reader;
 
@@ -60,32 +59,23 @@ final class RequestBodyArgumentResolver implements ArgumentValueResolverInterfac
     private $validator;
 
     /**
-     * @var AttributeReader $modernReader Читатель аннотаций PHP 8.
-     */
-    private $modernReader;
-
-    /**
      * RequestBodyArgumentResolver constructor.
      *
-     * @param Reader                              $reader             Читатель аннотаций.
+     * @param ReaderInterface                     $reader             Читатель аннотаций.
      * @param ControllerResolver                  $controllerResolver Controller Resolver.
      * @param SerializerInterface                 $serializer         Сериалайзер.
      * @param RequestAnnotationValidatorInterface $validator          Валидатор.
-     * @param AttributeReader                     $modernReader       Читатель аннотаций PHP 8.
      */
     public function __construct(
-        Reader $reader,
+        ReaderInterface $reader,
         ControllerResolver $controllerResolver,
         SerializerInterface $serializer,
-        RequestAnnotationValidatorInterface $validator,
-        AttributeReader $modernReader
+        RequestAnnotationValidatorInterface $validator
     ) {
         $this->reader = $reader;
         $this->controllerResolver = $controllerResolver;
         $this->serializer = $serializer;
         $this->validator = $validator;
-
-        $this->modernReader = $modernReader;
     }
 
     /**

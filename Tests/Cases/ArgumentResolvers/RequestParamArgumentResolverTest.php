@@ -13,7 +13,6 @@ use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\Sampl
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
 use ReflectionException;
-use Spiral\Attributes\AttributeReader;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 /**
@@ -201,12 +200,11 @@ class RequestParamArgumentResolverTest extends ContainerAwareBaseTestCase
     public function testResolveCallValidation(): void
     {
         $this->obTestObject = new RequestParamArgumentResolver(
-            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
-            static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
+            static::$testContainer->get('annotated_bundle_resolvers.psr6_selective_reader'),
+            static::$testContainer->get(ControllerResolver::class),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(true),
-            static::$testContainer->get('property_info'),
-            new AttributeReader()
+            static::$testContainer->get('property_info')
         );
 
         $request = $this->createRequestPost(
@@ -235,12 +233,11 @@ class RequestParamArgumentResolverTest extends ContainerAwareBaseTestCase
     public function testResolveValidationOption(): void
     {
         $this->obTestObject = new RequestParamArgumentResolver(
-            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.psr6_selective_reader'),
             static::$testContainer->get(ControllerResolver::class),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(false),
-            static::$testContainer->get('property_info'),
-            new AttributeReader()
+            static::$testContainer->get('property_info')
         );
 
         $request = $this->createRequestPost(

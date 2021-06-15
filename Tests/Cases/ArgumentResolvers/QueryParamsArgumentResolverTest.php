@@ -316,12 +316,11 @@ class QueryParamsArgumentResolverTest extends ContainerAwareBaseTestCase
     public function testResolveCallValidation(): void
     {
         $this->obTestObject = new QueryParamsArgumentResolver(
-            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.psr6_selective_reader'),
             static::$testContainer->get(ControllerResolver::class),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(true),
-            static::$testContainer->get('property_info'),
-            new AttributeReader()
+            static::$testContainer->get('property_info')
         );
 
         $request = $this->createRequest(
@@ -350,12 +349,11 @@ class QueryParamsArgumentResolverTest extends ContainerAwareBaseTestCase
     public function testResolveValidationOption(): void
     {
         $this->obTestObject = new QueryParamsArgumentResolver(
-            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.psr6_selective_reader'),
             static::$testContainer->get(ControllerResolver::class),
             static::$testContainer->get('serializer'),
             $this->getMockValidator(false),
-            static::$testContainer->get('property_info'),
-            new AttributeReader()
+            static::$testContainer->get('property_info')
         );
 
         $request = $this->createRequest(

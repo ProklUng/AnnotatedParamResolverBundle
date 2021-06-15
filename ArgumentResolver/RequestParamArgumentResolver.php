@@ -9,7 +9,7 @@ use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateError
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidatorInterface;
 use ReflectionException;
-use Spiral\Attributes\AttributeReader;
+use Spiral\Attributes\ReaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
@@ -23,7 +23,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  *
  * @description
  *
- * Аннотация метода контроллера - @RequestParams. Параметры (не обязательные)
+ * Аннотация метода контроллера - @RequestParams. Или PHP 8 атрибут RequestParams.
+ *
+ * Параметры (не обязательные)
  * var - название переменной в action контроллера,
  * class - класс переменной в action контроллера.
  * Если не указано ни того, ни другого, то ресолвер проверяет - не реализует ли класс
@@ -65,34 +67,26 @@ final class RequestParamArgumentResolver implements ArgumentValueResolverInterfa
     private $extractor;
 
     /**
-     * @var AttributeReader $modernReader Читатель аннотаций PHP 8.
-     */
-    private $modernReader;
-
-    /**
      * RequestBodyArgumentResolver constructor.
      *
-     * @param Reader                              $reader             Читатель аннотаций.
+     * @param ReaderInterface                     $reader             Читатель аннотаций.
      * @param ControllerResolver                  $controllerResolver Controller Resolver.
      * @param SerializerInterface                 $serializer         Сериалайзер.
      * @param RequestAnnotationValidatorInterface $validator          Валидатор.
      * @param PropertyInfoExtractor               $extractor          Property extractor.
-     * @param AttributeReader                     $modernReader       Читатель аннотаций PHP 8.
      */
     public function __construct(
-        Reader $reader,
+        ReaderInterface $reader,
         ControllerResolver $controllerResolver,
         SerializerInterface $serializer,
         RequestAnnotationValidatorInterface $validator,
-        PropertyInfoExtractor $extractor,
-        AttributeReader $modernReader
+        PropertyInfoExtractor $extractor
     ) {
         $this->reader = $reader;
         $this->controllerResolver = $controllerResolver;
         $this->serializer = $serializer;
         $this->validator = $validator;
         $this->extractor = $extractor;
-        $this->modernReader = $modernReader;
     }
 
     /**

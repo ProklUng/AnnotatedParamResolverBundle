@@ -8,31 +8,31 @@ services:
     autoconfigure: true
     public: true
 
-  annotated_bundle_resolvers.annotations.dummy_registry:
-    class: Doctrine\Common\Annotations\AnnotationRegistry
-    calls:
-      - registerUniqueLoader: ['class_exists']
+  # Читатель аннотаций
+  annotated_bundle_resolvers.annotation_reader:
+    class: Spiral\Attributes\AnnotationReader
 
-  annotated_bundle_resolvers.annotations.reader:
-    class: Doctrine\Common\Annotations\AnnotationReader
-    calls:
-      - addGlobalIgnoredName: ['required', '@annotated_bundle_resolvers.annotations.dummy_registry']
+  # Читатель атрибутов PHP 8
+  annotated_bundle_resolvers.attribute_reader:
+    class: Spiral\Attributes\AttributeReader
 
+  # Совмещенный читатель аннотаций Доктрины и аттрибутов PHP 8
+  annotated_bundle_resolvers.annotations_selective_reader:
+    class: Spiral\Attributes\Composite\SelectiveReader
+    arguments:
+      - ['@annotated_bundle_resolvers.attribute_reader', '@annotated_bundle_resolvers.annotation_reader' ]
+
+  # Кэшированный вариант совмещенного читателя
+  annotated_bundle_resolvers.psr6_selective_reader:
+    class: Spiral\Attributes\Psr6CachedReader
+    arguments:
+      - '@annotated_bundle_resolvers.annotations_selective_reader'
+      - '@annotated_bundle_resolvers.filesystem_cache_adapter'
+
+  # PSR-6 cache adapter
   annotated_bundle_resolvers.filesystem_cache_adapter:
     class: Symfony\Component\Cache\Adapter\FilesystemAdapter
     arguments:
       - 'annotations'
       - '%annotations.cache_ttl_default%'
       - '%annotated_bundle_resolvers.cache_path%'
-
-  annotated_bundle_resolvers.annotations.filesystem_cache:
-    class: Symfony\Component\Cache\DoctrineProvider
-    arguments:
-      - '@annotated_bundle_resolvers.filesystem_cache_adapter'
-
-  annotated_bundle_resolvers.annotations.cached_reader:
-    class: Doctrine\Common\Annotations\CachedReader
-    arguments:
-      - '@annotated_bundle_resolvers.annotations.reader'
-      - '@annotated_bundle_resolvers.annotations.filesystem_cache'
-      - '%kernel.debug%'

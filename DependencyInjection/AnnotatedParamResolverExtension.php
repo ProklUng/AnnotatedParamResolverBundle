@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @since 20.04.2021
  */
-class AnnotatedParamResolverExtension extends Extension
+final class AnnotatedParamResolverExtension extends Extension
 {
     private const DIR_CONFIG = '/../Resources/config';
 

@@ -15,17 +15,14 @@ services:
     public: false
     class: Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver
 
-  Spiral\Attributes\AttributeReader: ~
-
   # Валидатор запроса.
   annotated_bundle_resolvers.validator_request:
     public: false
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidator
     arguments:
-      - '@annotated_bundle_resolvers.annotations.cached_reader'
+      - '@annotated_bundle_resolvers.psr6_selective_reader'
       - '@annotated_bundle_resolvers.validator'
       - '@serializer'
-      - '@Spiral\Attributes\AttributeReader'
 
   Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotationValidatorInterface: '@annotated_bundle_resolvers.validator_request'
 
@@ -36,11 +33,10 @@ services:
   annotated_bundle_resolvers.unserialize_request:
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestBodyArgumentResolver
     arguments:
-      - '@annotated_bundle_resolvers.annotations.cached_reader'
+      - '@annotated_bundle_resolvers.psr6_selective_reader'
       - '@annotated_bundle_resolvers.controller_resolver'
       - '@serializer'
       - '@annotated_bundle_resolvers.validator_request'
-      - '@Spiral\Attributes\AttributeReader'
     tags:
       - { name: controller.argument_value_resolver, priority: 1500 }
 
@@ -48,12 +44,11 @@ services:
   annotated_bundle_resolvers.query_params:
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\QueryParamsArgumentResolver
     arguments:
-      - '@annotated_bundle_resolvers.annotations.cached_reader'
+      - '@annotated_bundle_resolvers.psr6_selective_reader'
       - '@annotated_bundle_resolvers.controller_resolver'
       - '@serializer'
       - '@annotated_bundle_resolvers.validator_request'
       - '@property_info'
-      - '@Spiral\Attributes\AttributeReader'
     tags:
       - { name: controller.argument_value_resolver, priority: 1500 }
 
@@ -61,11 +56,10 @@ services:
   annotated_bundle_resolvers.post_params:
     class: Prokl\AnnotatedParamResolverBundle\ArgumentResolver\RequestParamArgumentResolver
     arguments:
-      - '@annotated_bundle_resolvers.annotations.cached_reader'
+      - '@annotated_bundle_resolvers.psr6_selective_reader'
       - '@annotated_bundle_resolvers.controller_resolver'
       - '@serializer'
       - '@annotated_bundle_resolvers.validator_request'
       - '@property_info'
-      - '@Spiral\Attributes\AttributeReader'
     tags:
       - { name: controller.argument_value_resolver, priority: 1500 }

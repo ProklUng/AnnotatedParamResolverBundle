@@ -2,13 +2,11 @@
 
 namespace Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator;
 
-use Doctrine\Common\Annotations\Reader;
 use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Exceptions\ValidateErrorException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
-use Spiral\Attributes\AttributeReader;
-use Spiral\Attributes\Internal\FallbackAttributeReader;
+use Spiral\Attributes\ReaderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -21,7 +19,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class RequestAnnotationValidator implements RequestAnnotationValidatorInterface
 {
     /**
-     * @var Reader $reader Читатель аннотаций.
+     * @var ReaderInterface $reader Читатель аннотаций.
      */
     private $reader;
 
@@ -36,28 +34,20 @@ class RequestAnnotationValidator implements RequestAnnotationValidatorInterface
     private $serializer;
 
     /**
-     * @var AttributeReader
-     */
-    private $modernReader;
-
-    /**
      * RequestAnnotationValidator constructor.
      *
-     * @param Reader              $reader       Читатель аннотаций.
+     * @param ReaderInterface     $reader       Читатель аннотаций.
      * @param ValidatorInterface  $validator    Валидатор.
      * @param SerializerInterface $serializer   Сериалайзер.
-     * @param AttributeReader     $modernReader Читатель аннотаций PHP 8.
      */
     public function __construct(
-        Reader $reader,
+        ReaderInterface $reader,
         ValidatorInterface $validator,
-        SerializerInterface $serializer,
-        AttributeReader $modernReader
+        SerializerInterface $serializer
     ) {
         $this->reader = $reader;
         $this->validator = $validator;
         $this->serializer = $serializer;
-        $this->modernReader = $modernReader;
     }
 
     /**
@@ -116,16 +106,10 @@ class RequestAnnotationValidator implements RequestAnnotationValidatorInterface
         $props = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
         $annotations = [];
         foreach ($props as $property) {
-            // Обработка аннотаций PHP 8.
-            $modernAnnotations = $this->modernReader->getPropertyMetadata($property);
-            $arModernAnnotation = iterator_to_array($modernAnnotations);
 
-            foreach($arModernAnnotation as $item) {
+            $modernAnnotations = $this->reader->getPropertyMetadata($property);
+            foreach($modernAnnotations as $item) {
                 $annotations[$property->getName()] = $item;
-            }
-
-            if (count($arModernAnnotation) === 0) {
-                $annotations[$property->getName()] = $this->reader->getPropertyAnnotations($property);
             }
         }
 

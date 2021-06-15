@@ -14,7 +14,6 @@ use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\Sampl
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Traits\ArgumentResolverTrait;
 use Prokl\AnnotatedParamResolverBundle\Tests\Cases\ArgumentResolvers\Tools\SampleControllerArguments;
 use ReflectionException;
-use Spiral\Attributes\AttributeReader;
 
 /**
  * Class RequestBodyArgumentResolverTest
@@ -226,11 +225,10 @@ class RequestBodyArgumentResolverTest extends ContainerAwareBaseTestCase
     public function testResolveCallValidation(): void
     {
         $this->obTestObject = new RequestBodyArgumentResolver(
-            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
+            static::$testContainer->get('annotated_bundle_resolvers.psr6_selective_reader'),
             static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
             static::$testContainer->get('serializer'),
-            $this->getMockValidator(true),
-            new AttributeReader()
+            $this->getMockValidator(true)
         );
 
         $request = $this->createRequestJson(
@@ -259,11 +257,10 @@ class RequestBodyArgumentResolverTest extends ContainerAwareBaseTestCase
     public function testResolveValidationOption(): void
     {
         $this->obTestObject = new RequestBodyArgumentResolver(
-            static::$testContainer->get('annotated_bundle_resolvers.annotations.reader'),
-            static::$testContainer->get('Symfony\Component\HttpKernel\Controller\ControllerResolver'),
+            static::$testContainer->get('annotated_bundle_resolvers.psr6_selective_reader'),
+            static::$testContainer->get(ControllerResolver::class),
             static::$testContainer->get('serializer'),
-            $this->getMockValidator(false),
-            new AttributeReader()
+            $this->getMockValidator(false)
         );
 
         $request = $this->createRequestJson(
