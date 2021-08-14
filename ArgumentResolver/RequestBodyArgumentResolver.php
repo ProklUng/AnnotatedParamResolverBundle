@@ -11,7 +11,7 @@ use Prokl\AnnotatedParamResolverBundle\ArgumentResolver\Validator\RequestAnnotat
 use Spiral\Attributes\ReaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -44,7 +44,7 @@ final class RequestBodyArgumentResolver implements ArgumentValueResolverInterfac
     private $reader;
 
     /**
-     * @var ControllerResolver $controllerResolver Controller Resolver.
+     * @var ControllerResolverInterface $controllerResolver Controller Resolver.
      */
     private $controllerResolver;
 
@@ -62,13 +62,13 @@ final class RequestBodyArgumentResolver implements ArgumentValueResolverInterfac
      * RequestBodyArgumentResolver constructor.
      *
      * @param ReaderInterface                     $reader             Читатель аннотаций.
-     * @param ControllerResolver                  $controllerResolver Controller Resolver.
+     * @param ControllerResolverInterface         $controllerResolver Controller Resolver.
      * @param SerializerInterface                 $serializer         Сериалайзер.
      * @param RequestAnnotationValidatorInterface $validator          Валидатор.
      */
     public function __construct(
         ReaderInterface $reader,
-        ControllerResolver $controllerResolver,
+        ControllerResolverInterface $controllerResolver,
         SerializerInterface $serializer,
         RequestAnnotationValidatorInterface $validator
     ) {
